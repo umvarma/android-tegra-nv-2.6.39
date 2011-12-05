@@ -27,3 +27,8 @@ obj-$(CONFIG_SND_SOC_TEGRA_WM8903) += snd-soc-tegra-wm8903.o
 obj-$(CONFIG_SND_SOC_TEGRA_WM8753) += snd-soc-tegra-wm8753.o
 obj-$(CONFIG_SND_SOC_TEGRA_MAX98088) += snd-soc-tegra-max98088.o
 obj-$(CONFIG_SND_SOC_TEGRA_ALC5624) += snd-soc-tegra-alc5624.o
+obj-$(CONFIG_SND_SOC_TEGRA_ALC5623) += snd-soc-tegra-alc5623.o
+
+ifeq ($(CONFIG_SND_DEBUG),y)
+EXTRA_CFLAGS += -DDEBUG
+endif

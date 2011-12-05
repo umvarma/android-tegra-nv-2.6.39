@@ -1,5 +1,5 @@
 /*
- * arch/arm/mach-tegra/board-shuttle-nand.c
+ * arch/arm/mach-tegra/board-smba1002-nand.c
  *
  * Copyright (C) 2011 Eduardo José Tagle <ejtagle@tutopia.com>
  * Copyright (C) 2010 Google, Inc.
@@ -40,12 +40,12 @@
 #include <mach/iomap.h>
 
 #include "board.h"
-#include "board-shuttle.h"
+#include "board-smba1002.h"
 #include "clock.h"
 #include "gpio-names.h"
 #include "devices.h"
 
-static struct tegra_nand_chip_parms shuttle_nand_chip_parms[] = {
+static struct tegra_nand_chip_parms smba1002_nand_chip_parms[] = {
 	/* Samsung K5E2G1GACM */
 	[0] = {
 		.vendor_id   = 0xEC,
@@ -392,63 +392,51 @@ static struct tegra_nand_chip_parms shuttle_nand_chip_parms[] = {
 
 /*
 	Default NAND layout is:
-	2048K@6784K(misc)
-	5120K@9344K(recovery),
-	8192K@14976K(boot),
-	125440K@23680K(system),
-	32768K@149632K(cache),
-	4096K@182912K(staging),
-	336256K@187520K(userdata)
+	16384K@9984K(misc)
+	16384K@26880K(recovery)
+	16384K@43776K(boot)
+	204800K@60672K(system)
+	781952K@266112K(cache)
 	
 	Can be overriden from the command line
 */
 	
-static struct mtd_partition shuttle_nand_partitions[] = {
+static struct mtd_partition smba1002_nand_partitions[] = {
 	[0] = {
 		.name		= "misc",
-		.offset		=  6784*1024,
-		.size		=  2048*1024,
+		.offset		=  9984*1024,
+		.size		=  16384*1024,
 		.mask_flags	= MTD_WRITEABLE, /* r/o */
 	},
 	[1] = {
 		.name		= "recovery",
-		.offset		=  9344*1024,
-		.size		=  5120*1024,
+		.offset		=  26880*1024,
+		.size		=  16384*1024,
 		.mask_flags	= MTD_WRITEABLE, /* r/o */
 	},
 	[2] = {
 		.name		= "boot",
-		.offset		= 14976*1024,
-		.size		=  8192*1024,
+		.offset		=  43776*1024,
+		.size		=  16384*1024,
 	},
 	[3] = {
 		.name		= "system",
-		.offset		=  23680*1024,
-		.size		= 125440*1024,
+		.offset		=  60672*1024,
+		.size		= 204800*1024,
 	},
 	[4] = {
 		.name		= "cache",
-		.offset		= 149632*1024,
-		.size		=  32768*1024,
-	},
-	[5] = {
-		.name		= "staging",
-		.offset		= 182912*1024,
-		.size		=   4096*1024,
-	},
-	[6] = {
-		.name		= "userdata",
-		.offset		= 187520*1024,
-		.size		= 336256*1024,
+		.offset		= 266112*1024,
+		.size		=  781952*1024,
 	},
 };
 
-static struct tegra_nand_platform shuttle_nand_data = {
+static struct tegra_nand_platform smba1002_nand_data = {
 	.max_chips	= 8,
-	.chip_parms	= shuttle_nand_chip_parms,
-	.nr_chip_parms  = ARRAY_SIZE(shuttle_nand_chip_parms),
-	.parts		= shuttle_nand_partitions,
-	.nr_parts	= ARRAY_SIZE(shuttle_nand_partitions),
+	.chip_parms	= smba1002_nand_chip_parms,
+	.nr_chip_parms  = ARRAY_SIZE(smba1002_nand_chip_parms),
+	.parts		= smba1002_nand_partitions,
+	.nr_parts	= ARRAY_SIZE(smba1002_nand_partitions),
 };
 
 static struct resource resources_nand[] = {
@@ -465,16 +453,16 @@ struct platform_device tegra_nand_device = {
 	.num_resources  = ARRAY_SIZE(resources_nand),
 	.resource       = resources_nand,
 	.dev            = {
-		.platform_data = &shuttle_nand_data,
+		.platform_data = &smba1002_nand_data,
 	},
 };
 
-int __init shuttle_nand_register_devices(void)
+int __init smba1002_nand_register_devices(void)
 {
 
 	/* Enable writes on NAND */
-	gpio_request(SHUTTLE_NAND_WPN, "nand_wp#");
-	gpio_direction_output(SHUTTLE_NAND_WPN, 1);
+	gpio_request(SMBA1002_NAND_WPN, "nand_wp#");
+	gpio_direction_output(SMBA1002_NAND_WPN, 1);
 
 	platform_device_register(&tegra_nand_device);
 	return 0;

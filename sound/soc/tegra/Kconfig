@@ -135,3 +135,19 @@ config SND_SOC_TEGRA_ALC5624
 	help
 	  Say Y or M here if you want to add support for SoC audio on the
 	  Shuttle (P10AN01) Tablet PCs. 
+
+config SND_SOC_TEGRA_ALC5623
+	tristate "SoC Audio support for SMBA1002 based Tablet PCs"
+	depends on SND_SOC_TEGRA && MACH_SMBA1002 && I2C
+	default m
+	depends on MACH_HAS_SND_SOC_TEGRA_ALC5623
+	select SND_SOC_TEGRA20_I2S if ARCH_TEGRA_2x_SOC
+	select SND_SOC_TEGRA30_I2S if ARCH_TEGRA_3x_SOC
+	select SND_SOC_TEGRA20_SPDIF if ARCH_TEGRA_2x_SOC
+	select SND_SOC_TEGRA30_SPDIF if ARCH_TEGRA_3x_SOC
+	select SND_SOC_ALC5623
+	select SND_SOC_SPDIF
+	help
+	  Say Y or M here if you want to add support for SoC audio on the
+	  SMBA1002 Tablet PCs. 
+

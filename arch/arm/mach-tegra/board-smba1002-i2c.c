@@ -1,7 +1,8 @@
 /*
- * arch/arm/mach-tegra/board-shuttle-i2c.c
+ * arch/arm/mach-tegra/board-smba1002-i2c.c
  *
  * Copyright (C) 2011 Eduardo José Tagle <ejtagle@tutopia.com>
+ * Copyright (C) 2011 Jens Andersen <jens.andersen@gmail.com>
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -29,12 +30,12 @@
 #include "board.h"
 #include "devices.h"
 #include "gpio-names.h"
-#include "board-shuttle.h"
+#include "board-smba1002.h"
 
-static struct tegra_i2c_platform_data shuttle_i2c1_platform_data = {
+static struct tegra_i2c_platform_data smba1002_i2c1_platform_data = {
 	.adapter_nr	= 0,
 	.bus_count	= 1,
-	.bus_clk_rate	= { 400000, 0 },
+	.bus_clk_rate	= { 100000, 0 },
 };
 
 static const struct tegra_pingroup_config i2c2_ddc = {
@@ -47,7 +48,7 @@ static const struct tegra_pingroup_config i2c2_gen2 = {
 	.func		= TEGRA_MUX_I2C2,
 };
 
-static struct tegra_i2c_platform_data shuttle_i2c2_platform_data = {
+static struct tegra_i2c_platform_data smba1002_i2c2_platform_data = {
 	.adapter_nr	= 1,
 	.bus_count	= 2,
 	.bus_clk_rate	= { 100000, 100000 },
@@ -55,23 +56,29 @@ static struct tegra_i2c_platform_data shuttle_i2c2_platform_data = {
 	.bus_mux_len	= { 1, 1 },
 };
 
-static struct tegra_i2c_platform_data shuttle_dvc_platform_data = {
+static struct tegra_i2c_platform_data smba1002_i2c3_platform_data = {
+	.adapter_nr	= 3,
+	.bus_count	= 1,
+	.bus_clk_rate	= { 100000, 0 },
+};
+
+static struct tegra_i2c_platform_data smba1002_dvc_platform_data = {
 	.adapter_nr	= 4,
 	.bus_count	= 1,
-	.bus_clk_rate	= { 400000, 0 },
+	.bus_clk_rate	= { 100000, 0 },
 	.is_dvc		= true,
 };
 
-int __init shuttle_i2c_register_devices(void)
+int __init smba1002_i2c_register_devices(void)
 {
-	/* Note: i2c3 is used as an slave in Shuttle, so it must NOT be registered here as Master! */
-	
-	tegra_i2c_device1.dev.platform_data = &shuttle_i2c1_platform_data;
-	tegra_i2c_device2.dev.platform_data = &shuttle_i2c2_platform_data;
-	tegra_i2c_device4.dev.platform_data = &shuttle_dvc_platform_data;
+	tegra_i2c_device1.dev.platform_data = &smba1002_i2c1_platform_data;
+	tegra_i2c_device2.dev.platform_data = &smba1002_i2c2_platform_data;
+	tegra_i2c_device3.dev.platform_data = &smba1002_i2c3_platform_data;
+	tegra_i2c_device4.dev.platform_data = &smba1002_dvc_platform_data;
 
 	platform_device_register(&tegra_i2c_device1);
 	platform_device_register(&tegra_i2c_device2);
+	platform_device_register(&tegra_i2c_device3);
 	platform_device_register(&tegra_i2c_device4);
 	
 	return 0;
